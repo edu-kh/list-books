@@ -1,2516 +1,686 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link href="https://fonts.googleapis.com" rel="preconnect">
-    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Moul&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-
-    <title>បញ្ជីសៀវភៅ</title>
-    <style>
-        :root {
-            --bg-1: #eef3ff;
-            --bg-2: #fef9ee;
-            --bg-3: #ffeef2;
-            --paper: #ffffff;
-            --ink: #1c274c;
-            --ink-soft: #343947;
-            --ink-faint: #9aa3bf;
-
-            --primary: #4361ee;
-            --primary-dark: #2f46c7;
-            --primary-light: #e9edff;
-            --primary-glow: rgba(67, 97, 238, 0.28);
-
-            --accent-purple: #8b5cf6;
-            --accent-purple-dark: #6d28d9;
-            --accent-coral: #ff6b6b;
-            --accent-coral-dark: #e64545;
-            --accent-emerald: #10b981;
-            --accent-emerald-dark: #0a8f68;
-
-            --hl-green-bg: #e3fbf0; --hl-green-text: #0ba360; --hl-green-border: #5be2a4;
-            --hl-blue-bg: #eaf2ff; --hl-blue-text: #2e6ee0; --hl-blue-border: #8fb8ff;
-            --hl-amber-bg: #fff6e0; --hl-amber-text: #b7791f; --hl-amber-border: #ffd166;
-            --hl-red-bg: #ffeef0; --hl-red-text: #e0405c; --hl-red-border: #ffb2c0;
-            --hl-gray-bg: #f4f5f9; --hl-gray-text: #9aa3bf; --hl-gray-border: #e2e5f0;
-            --placeholder-text: #564131bf;
-
-            --radius-sm: 10px;
-            --radius-md: 16px;
-            --radius-lg: 24px;
-            --radius-pill: 999px;
-
-            --shadow-sm: 0 2px 8px rgba(28, 39, 76, 0.07);
-            --shadow-md: 0 10px 26px rgba(28, 39, 76, 0.10);
-            --shadow-lg: 0 22px 48px rgba(28, 39, 76, 0.18);
-
-            --student-column-width: 150px;
-            --subject-column-width: 105px;
-            --subject-column-gap: 12px;
-        }
-
-        * {
-            box-sizing: border-box;
-            font-family: 'Poppins', 'Battambang', system-ui, Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        html { scroll-behavior: smooth; }
-
-        body {
-            position: relative;
-            background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
-            background-size: 300% 300%;
-            animation: gradientDrift 20s ease infinite;
-            margin: 0;
-            padding: 0;
-            padding-bottom: 64px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            color: var(--ink);
-            overflow-x: hidden;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            left: 50%;
-            top: 50%;
-            width: 30vw;
-            height: 30vw;
-            max-width: 420px;
-            max-height: 420px;
-            min-width: 220px;
-            min-height: 220px;
-            transform: translate(-50%, -50%);
-            background-image: url("ChatGPT Image Aug 29, 2026, 08_18_17 PM.png");
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
-            border-radius: 24px;
-            border: 2px solid rgba(255,255,255,0.9);
-            box-shadow: 0 16px 36px rgba(28, 39, 76, 0.12);
-            opacity: 0.3;
-            pointer-events: none;
-            z-index: 0;
-            animation: photoFloat 8s ease-in-out infinite;
-        }
-
-        @keyframes photoFloat {
-            0%, 100% { transform: translate(-50%, -50%) translateY(0px); }
-            50% { transform: translate(-50%, -50%) translateY(-14px); }
-        }
-
-        @keyframes gradientDrift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        ::selection { background: var(--primary-light); color: var(--primary-dark); }
-
-        ::-webkit-scrollbar { width: 10px; height: 10px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--primary), var(--accent-purple)); border-radius: var(--radius-pill); }
-        ::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
-
-        /* --- PAGE LOADER STYLES --- */
-        .loader-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: linear-gradient(135deg, var(--bg-1), var(--bg-3));
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.45s ease;
-        }
-
-        .loader-badge {
-            width: 84px; height: 84px;
-            border-radius: 28px;
-            display: flex; align-items: center; justify-content: center;
-            background: var(--paper);
-            box-shadow: var(--shadow-lg);
-            margin-bottom: 22px;
-            animation: loaderBob 1.8s ease-in-out infinite;
-        }
-
-        .loader-badge i {
-            font-size: 2rem;
-            background: linear-gradient(135deg, var(--primary), var(--accent-purple));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        @keyframes loaderBob {
-            0%, 100% { transform: translateY(0) rotate(-3deg); }
-            50% { transform: translateY(-10px) rotate(3deg); }
-        }
-
-        .spinner {
-            width: 44px;
-            height: 44px;
-            border: 4px solid var(--primary-light);
-            border-top: 4px solid var(--primary);
-            border-right: 4px solid var(--accent-purple);
-            border-radius: 50%;
-            animation: spin 0.9s linear infinite;
-        }
-
-        .loader-text {
-            margin-top: 18px;
-            font-family: "Battambang", sans-serif;
-            color: var(--ink);
-            font-size: 1.05rem;
-            font-weight: bold;
-            animation: pulse 1.5s infinite ease-in-out;
-            letter-spacing: 0.3px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.55; }
-            50% { opacity: 1; }
-            100% { opacity: 0.55; }
-        }
-        /* ------------------------- */
-
-        .hero {
-            position: relative;
-            z-index: 1;
-            overflow: hidden;
-            background: linear-gradient(120deg, #4361ee 0%, #6c5ce7 55%, #8b5cf6 100%);
-            color: white;
-            width: 100%;
-            padding: 2.1rem 1rem 3.1rem;
-            text-align: center;
-            border-radius: 0 0 32px 32px;
-            box-shadow: 0 14px 34px rgba(67, 97, 238, 0.28);
-            animation: heroFadeIn 0.7s ease both;
-        }
-
-        @keyframes heroFadeIn {
-            from { opacity: 0; transform: translateY(-14px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero-decor {
-            position: fixed;
-            opacity: 0.16;
-            font-size: 1.7rem;
-            color: white;
-            animation: floatIcon 6s ease-in-out infinite;
-            z-index: 0;
-        }
-
-        @keyframes floatIcon {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-14px) rotate(10deg); }
-        }
-
-        .hero h3 {
-            margin: 0 0 6px;
-            font-size: 1.6rem;
-            font-family: "Moul";
-            position: relative;
-            z-index: 1;
-            text-shadow: 0 2px 14px rgba(0,0,0,0.18);
-        }
-
-        .hero p {
-            font-family: "Battambang";
-            font-size: 1.15rem;
-            margin: 0;
-            position: relative;
-            z-index: 1;
-            opacity: 0.95;
-        }
-
-        .search-container {
-            position: relative;
-            z-index: 1;
-            max-width: 600px;
-            margin: -28px auto 0 auto;
-            width: 90%;
-            z-index: 5;
-            animation: floatUp 0.6s ease 0.1s both;
-        }
-
-        @keyframes floatUp {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        #searchInput {
-            width: 100%;
-            padding: 16px 25px 16px 52px;
-            font-size: 1.05rem;
-            border: none;
-            border-radius: var(--radius-pill);
-            outline: none;
-            background: var(--paper);
-            box-shadow: var(--shadow-lg);
-            transition: box-shadow 0.3s ease, transform 0.2s ease;
-            color: var(--ink);
-        }
-
-        #searchInput::placeholder { color: var(--ink-faint); }
-
-        #searchInput:focus {
-            box-shadow: 0 14px 32px var(--primary-glow), 0 0 0 4px var(--primary-light);
-            transform: translateY(-2px);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 22px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--ink-faint);
-            font-size: 1.05rem;
-            pointer-events: none;
-            transition: color 0.3s ease, transform 0.3s ease;
-        }
-
-        #searchInput:focus ~ .search-icon {
-            color: var(--primary);
-            transform: translateY(-50%) scale(1.15) rotate(-8deg);
-        }
-
-        #resultsContainer {
-            position: relative;
-            z-index: 1;
-            width: 90%;
-            max-width: 600px;
-            margin: 14px auto 0;
-            background: var(--paper);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
-            display: none;
-            max-height: 400px;
-            overflow-y: auto;
-            border: 1px solid rgba(67, 97, 238, 0.08);
-        }
-
-        .class-item {
-            padding: 15px 25px;
-            border-bottom: 1px solid #f0f2fa;
-            color: var(--ink);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: background 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
-            animation: itemFadeIn 0.3s ease both;
-        }
-
-        @keyframes itemFadeIn {
-            from { opacity: 0; transform: translateY(-6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .class-item:nth-child(1) { animation-delay: 0.02s; }
-        .class-item:nth-child(2) { animation-delay: 0.05s; }
-        .class-item:nth-child(3) { animation-delay: 0.08s; }
-        .class-item:nth-child(4) { animation-delay: 0.11s; }
-        .class-item:nth-child(5) { animation-delay: 0.14s; }
-        .class-item:nth-child(6) { animation-delay: 0.17s; }
-        .class-item:nth-child(7) { animation-delay: 0.20s; }
-        .class-item:nth-child(8) { animation-delay: 0.23s; }
-
-        .class-item::before {
-            content: "";
-            position: absolute;
-            left: 0; top: 0; bottom: 0;
-            width: 4px;
-            background: linear-gradient(180deg, var(--primary), var(--accent-purple));
-            transform: scaleY(0);
-            transition: transform 0.2s ease;
-        }
-
-        .class-item:last-child { border-bottom: none; }
-
-        .class-item:hover {
-            background-color: var(--primary-light);
-            color: var(--primary-dark);
-            padding-left: 30px;
-        }
-
-        .class-item:hover::before { transform: scaleY(1); }
-
-        .no-results {
-            padding: 22px;
-            text-align: center;
-            color: var(--ink-faint);
-            font-style: italic;
-        }
-
-        /* --- WIDE STUDENT PANEL STYLES --- */
-        .panel-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(28, 39, 76, 0.55);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .student-panel {
-            background: rgba(250, 251, 255, 0.98);
-            width: 98%;
-            max-width: 96%;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            max-height: 95vh;
-            animation: panelSlideIn 0.35s cubic-bezier(.16,1,.3,1) both;
-            font-family: 'Battambang';
-        }
-
-        @keyframes panelSlideIn {
-            from { transform: translateY(28px) scale(0.97); opacity: 0; }
-            to { transform: translateY(0) scale(1); opacity: 1; }
-        }
-
-        .panel-header {
-            background: linear-gradient(120deg, var(--primary), var(--accent-purple));
-            color: white;
-            padding: 16px 22px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .panel-header h2 {
-            margin: 0;
-            font-size: 1.22rem;
-            letter-spacing: 0.2px;
-        }
-
-        .close-btn {
-            background: rgba(255,255,255,0.2);
-            font-size: 1.4rem;
-            width: 38px;
-            height: 38px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border-radius: 50%;
-            color: #ffffff;
-            transition: all 0.25s ease;
-        }
-        .close-btn:hover {
-            color: var(--accent-coral-dark);
-            background-color: #ffffff;
-            transform: rotate(90deg);
-        }
-
-        .panel-content {
-            padding: 8px;
-            overflow-x: auto;
-            overflow-y: auto;
-            flex-grow: 1;
-            background: linear-gradient(180deg, #fbfcff, #f5f7ff);
-        }
-
-        .student-item {
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid #eef0fa;
-            padding: 6px 4px;
-            min-width: max-content;
-            border-radius: 12px;
-            transition: background 0.2s ease, transform 0.15s ease;
-            animation: rowFadeIn 0.35s ease both;
-        }
-
-        @keyframes rowFadeIn {
-            from { opacity: 0; transform: translateX(-8px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .student-item:nth-child(1) { animation-delay: 0.01s; }
-        .student-item:nth-child(2) { animation-delay: 0.03s; }
-        .student-item:nth-child(3) { animation-delay: 0.05s; }
-        .student-item:nth-child(4) { animation-delay: 0.07s; }
-        .student-item:nth-child(5) { animation-delay: 0.09s; }
-        .student-item:nth-child(6) { animation-delay: 0.11s; }
-        .student-item:nth-child(7) { animation-delay: 0.13s; }
-        .student-item:nth-child(8) { animation-delay: 0.15s; }
-        .student-item:nth-child(9) { animation-delay: 0.17s; }
-        .student-item:nth-child(10) { animation-delay: 0.19s; }
-
-        .student-item:hover {
-            background-color: var(--primary-light);
-            transform: translateX(2px);
-        }
-
-        /* Sticky Last Row (summary row) at bottom of scroll area */
-        .student-item.sticky-bottom {
-            position: sticky;
-            bottom: 0;
-            z-index: 3;
-            background: linear-gradient(180deg, #fff7f2, #ffe9e9);
-            box-shadow: 0 -6px 16px -4px rgba(28,39,76,0.10);
-            border-radius: 12px;
-        }
-
-        .student-item.sticky-bottom .student-info {
-            background: transparent;
-        }
-
-        /* Sticky Student Column */
-        .student-info {
-            height: 65px;
-            display: flex;
-            align-items: center;
-            width: var(--student-column-width);
-            flex: 0 0 var(--student-column-width);
-            flex-shrink: 0;
-            position: sticky;
-            left: 0;
-            background: var(--paper);
-            z-index: 2;
-            padding-right: 1px;
-            box-shadow: 4px 0 10px -4px rgba(28,39,76,0.08);
-            font-size: 0.9rem;
-            border-radius: 12px;
-        }
-        .student-info:hover {
-            width: var(--student-column-width);
-        }
-
-        .student-item:hover .student-info {
-            background-color: var(--primary-light);
-        }
-
-        .student-avatar {
-            width: 30px; height: 30px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-light), #dbe3ff);
-            color: var(--primary);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-shrink: 0;
-            margin-right: 6px;
-            font-size: 0.85rem;
-        }
-
-        .student-name {
-            font-weight: 600;
-            color: var(--ink);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            cursor: pointer;
-        }
-
-        .student-name.is-expanded {
-            position: absolute;
-            left: 42px;
-            top: 50%;
-            z-index: 10;
-            width: max-content;
-            max-width: calc(100vw - 76px);
-            padding: 7px 10px;
-            white-space: normal;
-            overflow: visible;
-            text-overflow: clip;
-            word-break: keep-all;
-            background: var(--paper);
-            border: 1px solid var(--primary-light);
-            border-radius: var(--radius-sm);
-            box-shadow: var(--shadow-md);
-            transform: translateY(-50%);
-        }
-
-        /* Subjects Container */
-        .subjects-container {
-            display: flex;
-            gap: var(--subject-column-gap);
-            padding-left: 10px;
-        }
-
-        .subject-attendance {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            width: var(--subject-column-width);
-            min-width: var(--subject-column-width);
-            flex: 0 0 var(--subject-column-width);
-            background: var(--paper);
-            border-radius: 14px;
-            padding: 8px 6px;
-            box-shadow: var(--shadow-sm);
-            transition: box-shadow 0.2s ease, transform 0.2s ease;
-        }
-
-        .subject-attendance:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
-        }
-
-        .subject-label {
-            font-size: 0.8rem;
-            color: var(--ink-soft);
-            font-weight: 720;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            text-align: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
-        }
-
-        /* Subject Header Row (sticky, columns match .subject-attendance width so it lines up with every student row) */
-        .subject-header-row {
-            display: flex;
-            align-items: stretch;
-            position: sticky;
-            top: 0;
-            z-index: 4;
-            background: linear-gradient(180deg, #fbfcff, #f5f7ff);
-            border-bottom: 2px solid var(--primary-light);
-            padding: 6px 4px;
-            min-width: max-content;
-           
-        }
-
-        .subject-header-spacer {
-            width: var(--student-column-width);
-            flex: 0 0 var(--student-column-width);
-            position: sticky;
-            left: 0;
-            background: var(--paper);
-            z-index: 5;
-            border-radius: 12px;
-            box-shadow: 4px 0 10px -4px rgba(28,39,76,0.08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            font-family: 'Battambang', sans-serif;
-            font-size: 0.84rem;
-            font-weight: 720;
-            color: var(--primary-dark);
-        }
-
-        .subject-header-cells {
-            display: flex;
-            gap: var(--subject-column-gap);
-            padding-left: 10px;
-        }
-
-        .subject-header-cell {
-            width: var(--subject-column-width);
-            min-width: var(--subject-column-width);
-            flex: 0 0 var(--subject-column-width);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            font-size: 0.88rem;
-            font-weight: 720;
-            color: var(--primary-dark);
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            white-space: nowrap;
-            padding: 8px 6px;
-        }
-
-        /* Header cell that also holds the ភាសា (English/French/Chinese) picker,
-           shown as a small round icon button sitting to the right of the
-           subject label, so the column width/alignment with student rows
-           below stays unchanged. */
-        .subject-header-cell-with-select {
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            gap: 4px;
-            white-space: normal;
-            padding: 8px 3px;
-        }
-
-        .subject-header-label {
-            width: auto;
-            font-size: 0.74rem;
-            line-height: 1.15;
-        }
-
-        .subject-header-lang-select {
-            flex: 0 0 22px;
-            width: 22px;
-            height: 22px;
-            min-height: 22px;
-            min-width: 22px;
-            padding: 0;
-            border-radius: 50%;
-            background-color: var(--primary-light);
-            background-image: none;
-            color: var(--primary-dark);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-        }
-
-        .subject-header-lang-select:hover:not(:disabled) {
-            background-color: var(--primary);
-            color: #fff;
-        }
-
-        .attendance-select, .attendance-input {
-            padding: 8px 10px;
-            border-radius: var(--radius-pill);
-            border: 1.5px solid var(--hl-gray-border);
-            outline: none;
-            font-weight: 700;
-            font-size: 0.82rem;
-            width: 100%;
-            min-height: 38px;
-            line-height: 1.3;
-            text-align: center;
-            text-align-last: center;
-            transition: all 0.2s ease;
-            background-color: var(--hl-gray-bg);
-            color: var(--hl-gray-text);
-            -webkit-tap-highlight-color: transparent;
-            box-shadow: var(--shadow-sm);
-        }
-
-        /* Reset native OS/browser chrome so the select looks identical
-           across Chrome, Safari, Firefox, and mobile browsers, then draw
-           our own dropdown arrow so it stays consistent everywhere. */
-        .attendance-select {
-            cursor: pointer;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            padding-right: 30px;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7593' stroke-width='2.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-size: 13px;
-        }
-
-        .attendance-select::-ms-expand { display: none; }
-
-        .attendance-select:hover:not(:disabled) {
-            border-color: var(--primary);
-            box-shadow: var(--shadow-md);
-        }
-
-        .attendance-select:focus, .attendance-input:focus {
-            box-shadow: 0 0 0 4px var(--primary-light);
-            border-color: var(--primary);
-        }
-
-        .attendance-input {
-            background-color: #ffffff;
-            color: #333;
-            max-width: 120px;
-            cursor: text;
-        }
-
-        .attendance-select:disabled {
-            background-color: #f4f5f9;
-            color: #c3c8db;
-            cursor: not-allowed;
-            border-color: #eceef6;
-            opacity: 0.7;
-            box-shadow: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c3c8db' stroke-width='2.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-size: 13px;
-        }
-
-        .attendance-select.no-select {
-            background-color: var(--hl-gray-bg);
-            color: var(--placeholder-text);
-            border-color: var(--hl-gray-border);
-        }
-
-        .attendance-select.attendant {
-            background-color: var(--hl-green-bg);
-            color: var(--hl-green-text);
-            border-color: var(--hl-green-border);
-        }
-
-        .attendance-select.returnbook {
-            background-color: var(--hl-blue-bg);
-            color: var(--hl-blue-text);
-            border-color: var(--hl-blue-border);
-        }
-
-        .attendance-select.absent {
-            background-color: var(--hl-red-bg);
-            color: var(--hl-red-text);
-            border-color: var(--hl-red-border);
-        }
-
-        .attendance-select.oldbook {
-            background-color: var(--hl-amber-bg);
-            color: var(--hl-amber-text);
-            border-color: var(--hl-amber-border);
-        }
-
-        /* --- CUSTOM DROPDOWN (renders identically on every browser/device,
-           since native <option> lists can't be styled consistently) --- */
-        .custom-select-wrap {
-            position: relative;
-            width: 100%;
-        }
-
-        .custom-select-wrap .attendance-select {
-            width: 100%;
-            margin: 0;
-        }
-
-        .cs-panel {
-            position: fixed;
-            z-index: 3000;
-            background: var(--paper);
-            border: 1.5px solid var(--hl-gray-border);
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-lg);
-            padding: 6px;
-            max-height: 240px;
-            overflow-y: auto;
-            opacity: 0;
-            transform: scale(0.97);
-            transform-origin: top center;
-            pointer-events: none;
-            transition: opacity 0.15s ease, transform 0.15s ease;
-        }
-
-        .cs-panel.open {
-            opacity: 1;
-            transform: scale(1);
-            pointer-events: auto;
-        }
-
-        .cs-panel.flip-up { transform-origin: bottom center; }
-
-        .cs-panel::-webkit-scrollbar { width: 8px; }
-        .cs-panel::-webkit-scrollbar-thumb { background: var(--primary-light); border-radius: var(--radius-pill); }
-
-        .cs-option {
-            padding: 9px 14px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 0.88rem;
-            text-align: center;
-            color: var(--ink-soft);
-            cursor: pointer;
-            white-space: nowrap;
-            transition: background 0.14s ease, color 0.14s ease;
-        }
-
-        .cs-option:hover,
-        .cs-option.active {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-        }
-
-        .cs-option.selected {
-            background: var(--primary);
-            color: #fff;
-        }
-
-        .panel-footer {
-            padding: 15px 20px;
-            background: linear-gradient(180deg, #fbfcff, #f5f7ff);
-            border-top: 1px solid #eef0fa;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .panel-footer .save-btn {
-            margin-right: auto;
-        }
-
-        .btn {
-            border: none;
-            padding: 9px 18px;
-            font-size: 0.92rem;
-            font-weight: bold;
-            border-radius: var(--radius-pill);
-            cursor: pointer;
-            transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
-            color: white;
-            box-shadow: var(--shadow-sm);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            white-space: nowrap;
-        }
-        .btn3 {
-            border: none;
-            padding: 8px 12px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            border-radius: var(--radius-pill);
-            cursor: pointer;
-            transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
-            color: white;
-            box-shadow: var(--shadow-sm);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            white-space: nowrap;
-        }
-
-        .btn:hover, .btn3:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        .btn:active, .btn3:active {
-            transform: translateY(0) scale(0.97);
-        }
-
-        .pdf-btn {
-            background: linear-gradient(135deg, var(--accent-coral), var(--accent-coral-dark));
-        }
-
-        .preview-btn {
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-purple-dark));
-        }
-
-        .excel-btn {
-            background: linear-gradient(135deg, var(--accent-emerald), var(--accent-emerald-dark));
-        }
-
-        .save-btn {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            font-size: 1rem;
-        }
-
-        .btn:disabled, .btn3:disabled {
-            opacity: 0.55;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* --- FOOTER STYLES --- */
-        .site-footer {
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            z-index: 500;
-            padding: 14px 10px 16px;
-            text-align: center;
-            background: linear-gradient(120deg, #1c274c, #35418c);
-            color: #dfe6ea;
-            font-family: 'Battambang', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 0.3px;
-            transform: translateY(0);
-            opacity: 1;
-            transition: transform 0.4s ease, opacity 0.4s ease, visibility 0.4s ease;
-            animation: footerRise 0.6s ease-out;
-        }
-
-        .site-footer.hidden {
-            transform: translateY(100%);
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        .site-footer .heart {
-            display: inline-block;
-            color: #ed2a47;
-            animation: heartbeat 1.4s ease-in-out infinite;
-        }
-
-        @keyframes footerRise {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.25); }
-        }
-        /* ------------------------- */
-
-        /* --- PDF PREVIEW MODAL STYLES --- */
-        .pdf-preview-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: transparent;
-            z-index: 10002;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .pdf-preview-box {
-            background: white;
-            width: 95%;
-            max-width: 900px;
-            height: 92vh;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
-            resize: both;
-            min-width: 280px;
-            min-height: 220px;
-            cursor: move;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .pdf-preview-box.is-dragging {
-            touch-action: none;
-        }
-
-        @keyframes pdfPreviewSlideIn {
-            from { transform: translate(-50%, -50%) translateY(28px) scale(0.97); opacity: 0; }
-            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-        }
-
-        .pdf-preview-header {
-            background: linear-gradient(120deg, var(--accent-purple), var(--accent-purple-dark));
-            color: white;
-            padding: 12px 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: 'Battambang', sans-serif;
-            cursor: move;
-            user-select: none;
-            touch-action: none;
-        }
-
-        .pdf-preview-tools {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .pdf-preview-header h3 {
-            flex: 1;
-            text-align: center;
-        }
-
-        .pdf-preview-zoom-btn {
-            width: 32px;
-            height: 32px;
-            border: 0;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: white;
-            background: rgba(255,255,255,0.2);
-            font-size: 1rem;
-        }
-
-        .pdf-preview-zoom-btn:hover {
-            background: white;
-            color: var(--accent-purple-dark);
-        }
-
-        .pdf-preview-zoom-level {
-            min-width: 44px;
-            text-align: center;
-            font-size: 0.78rem;
-        }
-
-        .pdf-preview-header h3 {
-            margin: 0;
-            font-size: 1.05rem;
-        }
-
-        .pdf-preview-close {
-            font-size: 1.4rem;
-            width: 34px;
-            height: 34px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: #ffffff;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            transition: all 0.25s ease;
-        }
-
-        .pdf-preview-close:hover {
-            color: var(--accent-coral-dark);
-            background: #ffffff;
-            transform: rotate(90deg);
-        }
-
-        .pdf-preview-body {
-            flex-grow: 1;
-            background: #3d4566;
-            position: relative;
-            overflow: auto;
-            -webkit-overflow-scrolling: touch;
-            padding: 18px 10px;
-        }
-
-        .pdf-preview-pages {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 14px;
-            visibility: hidden;
-            min-width: 100%;
-        }
-
-        .pdf-preview-pages.is-zoomed {
-            align-items: flex-start;
-        }
-
-        .pdf-page-canvas {
-            max-width: none;
-            height: auto;
-            background: white;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.35);
-            border-radius: 6px;
-        }
-
-        .pdf-preview-loading {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: #eee;
-            font-family: 'Battambang', sans-serif;
-            font-size: 1rem;
-            gap: 12px;
-        }
-        /* ------------------------- */
-
-        /* --- CUSTOM POPUP STYLES --- */
-        .popup-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(28, 39, 76, 0.55);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .popup-box {
-            background: white;
-            padding: 26px 30px;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            animation: popupPop 0.35s cubic-bezier(.34,1.56,.64,1) both;
-            font-family: 'Battambang', sans-serif;
-        }
-
-        @keyframes popupPop {
-            from { transform: scale(0.85); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .popup-box p {
-            font-size: 1.1rem;
-            color: var(--ink);
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        /* --- DOWNLOAD OVERLAY STYLES --- */
-        .download-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(28, 39, 76, 0.55);
-            z-index: 10001;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .download-box {
-            background: white;
-            padding: 30px 35px;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
-            text-align: center;
-            max-width: 320px;
-            width: 85%;
-            animation: popupPop 0.3s ease-out both;
-            font-family: 'Battambang', sans-serif;
-        }
-
-        .download-icon-wrap {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 18px auto;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-
-        .download-icon-wrap.pdf {
-            background: var(--hl-red-bg);
-            color: var(--accent-coral-dark);
-        }
-
-        .download-icon-wrap.excel {
-            background: #e6f4ea;
-            color: var(--accent-emerald-dark);
-        }
-
-        .download-icon-wrap i {
-            font-size: 1.8rem;
-            animation: bounceDown 1s infinite ease-in-out;
-        }
-
-        @keyframes bounceDown {
-            0%, 100% { transform: translateY(-4px); opacity: 0.7; }
-            50% { transform: translateY(4px); opacity: 1; }
-        }
-
-        .download-box p {
-            font-size: 1.05rem;
-            color: var(--ink);
-            margin: 0 0 16px 0;
-            font-weight: bold;
-        }
-
-        .download-progress-track {
-            width: 100%;
-            height: 8px;
-            background: #eef0fa;
-            border-radius: var(--radius-pill);
-            overflow: hidden;
-        }
-
-        .download-progress-bar {
-            height: 100%;
-            width: 40%;
-            border-radius: var(--radius-pill);
-            background: linear-gradient(90deg, var(--primary), var(--accent-purple));
-            animation: progressSlide 1.1s infinite ease-in-out;
-        }
-
-        .download-progress-bar.pdf-color {
-            background: linear-gradient(90deg, var(--accent-coral), var(--accent-coral-dark));
-        }
-
-        .download-progress-bar.excel-color {
-            background: linear-gradient(90deg, var(--accent-emerald), var(--accent-emerald-dark));
-        }
-
-        @keyframes progressSlide {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(250%); }
-        }
-
-        @media (max-width: 640px) {
-            :root {
-                --student-column-width: 120px;
-                --subject-column-width: 92px;
-            }
-
-            .hero { padding: 1.8rem 0.8rem 2.6rem; border-radius: 0 0 24px 24px; }
-            .hero h3 { font-size: 1.35rem; }
-            .hero p { font-size: 0.95rem; }
-            /* Keep the action row (Save / View / PDF / Excel) on one line */
-            .panel-footer {
-                padding: 10px 8px;
-                gap: 6px;
-                flex-wrap: nowrap;
-            }
-            .panel-footer .save-btn {
-                margin-right: 0;
-            }
-            .btn, .btn3 {
-                flex: 1 1 0;
-                min-width: 0;
-                padding: 8px 4px;
-                font-size: 0.8rem;
-                gap: 3px;
-            }
-            .btn i, .btn3 i { font-size: 0.9em; }
-
-            /* Keep mobile controls consistent with the subject headers. */
-            .attendance-select, .attendance-input {
-                font-size: 0.8rem;
-                min-height: 40px;
-            }
-        }
-
-        @media (max-width: 380px) {
-            /* Very narrow phones: collapse button labels to icons only,
-               keeping all four actions on a single row. */
-            .btn, .btn3 {
-                font-size: 0;
-                padding: 9px 0;
-                gap: 0;
-            }
-            .btn i, .btn3 i { font-size: 0.95rem; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Moul&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Battambang&family=Moul&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>ព័ត៌មានសិស្សទី៩</title>
+  
+  <style>
+    body {
+     font-family: "Segoe UI", sans-serif,  "Moul";
+      background-color: rgb(216, 236, 253);
+      margin: 0;
+      padding: 10px;
+      font-weight: 400;
+      font-style: normal;
+      
+    }
+    form {
+       background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      padding: 20px;
+      max-width: 800px;
+      margin: 0px auto;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #ccc;
+     
+    }
+
+     .form-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 2rem;
+       
+    }
+     .form-header h2 {
+     font-size: 0.96rem;
+     font-weight: normal;
+    }
+    
+    .logo {
+      height: 50px;
+    }
+    .form-header {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+    .form-row {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+    .triple > label {
+      flex: 1 1 30%;
+    }
+    label {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      font-weight: normal;
+    }
+    input, select {
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+       font-family: "Battambang", system-ui;
+        font-size: 1rem;
+    }
+    /* Custom dropdown: replaces native <select> so it renders
+       identically on mobile and desktop (no OS picker on mobile) */
+    .custom-select {
+      position: relative;
+      margin-top: 5px;
+      font-family: "Battambang", system-ui;
+      font-size: 1rem;
+      user-select: none;
+    }
+    .custom-select-trigger {
+      padding: 8px 30px 8px 8px;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+      background: #fff;
+      cursor: pointer;
+      position: relative;
+      min-height: 1.2em;
+      color: #888;
+    }
+    .custom-select-trigger.has-value {
+      color: #000;
+    }
+    .custom-select-trigger::after {
+      content: "\f078";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.8rem;
+      color: #666;
+      transition: transform 0.2s ease;
+    }
+    .custom-select.open .custom-select-trigger::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
+    .custom-select-trigger:focus {
+      outline: 2px solid #3b82f6;
+      outline-offset: 1px;
+    }
+    .custom-select-options {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+      max-height: 220px;
+      overflow-y: auto;
+      z-index: 50;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .custom-select.open .custom-select-options {
+      display: block;
+    }
+    .custom-select-option {
+      padding: 8px 10px;
+      cursor: pointer;
+      color: #000;
+    }
+    .custom-select-option:hover,
+    .custom-select-option.highlighted {
+      background: #e6f0ff;
+    }
+    .custom-select-option.selected {
+      background: #d8ecfd;
+      font-weight: bold;
+    }
+    .options {
+      display: flex;
+      gap: 15px;
+      margin-top: 5px;
+    }
+    .square-radio input[type="radio"] {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #555;
+      margin-right: 5px;
+      display: inline-block;
+      vertical-align: middle;
+      border-radius: 3px;
+      position: relative;
+    }
+    .square-radio input[type="radio"]:checked::after {
+      content: "✅";
+      position: absolute;
+      top: -8px;
+      left: -4px;
+      color: green;
+      font-size: 18px;
+      font-style: bold;
+    }
+      .form-buttons {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      flex: 1;
+      min-width: 120px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      
+      color: rgb(231, 230, 230);
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease;
+       font-family: "Battambang", system-ui;
+    }
+
+     
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+    #status {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: normal;
+      color: green;
+    }
+    @media (max-width: 600px) {
+      .form-buttons {
+        flex-direction: row;
+      }
+    }
+     .custom-file-input {
+    display: none;
+  }
+
+  .custom-file-label {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: rgb(223, 223, 223);
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: "Battambang", system-ui;
+    height: 30px;
+  }
+ .custom-file-label:hover {
+      transform: translateY(-2px);
+    }
+
+  .filename-display {
+    margin-left: 10px;
+    font-family: "Battambang", system-ui;
+    font-size: 0.95rem;
+  }
+  .btn3d {
+	position: relative;
+	top: -6px;
+	border: 0;
+	transition: all 40ms linear;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-left: 2px;
+	margin-right: 2px;
+}
+
+.btn3d:active:focus,
+.btn3d:focus:hover,
+.btn3d:focus {
+	-moz-outline-style: none;
+	outline: medium none;
+}
+
+.btn3d:active,
+.btn3d.active {
+	top: 2px;
+}
+.btn3d.btn-success {
+	box-shadow: 0 0 0 1px #31c300 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #5eb924, 0 8px 8px 1px rgba(0, 0, 0, 0.5);
+	background-color: #42a302;
+}
+
+.btn3d.btn-success:active,
+.btn3d.btn-success.active {
+	box-shadow: 0 0 0 1px #30cd00 inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+	background-color: #42a302;
+}
+
+.btn3d.btn-default {
+	color: #666666;
+	box-shadow: 0 0 0 1px #ebebeb inset, 0 0 0 2px rgba(255, 255, 255, 0.10) inset, 0 8px 0 0 #BEBEBE, 0 8px 8px 1px rgba(0, 0, 0, .2);
+		background-color: #bab8b8;
+}
+
+.btn3d.btn-default:active,
+.btn3d.btn-default.active {
+	color: #ffffff;
+	box-shadow: 0 0 0 1px #ebebeb inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 1px 3px 1px rgba(0, 0, 0, .1);
+	background-color: #bab8b8;
+}
+
+/* DOB Flex Container and Modal Styles */
+.dob-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+.dob-container label {
+  flex: 1;
+  width: 50px;
+}
+
+.popup-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+}
+.popup-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 320px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  font-family: "Battambang", system-ui;
+}
+.popup-grid {
+  display: grid;
+  gap: 10px;
+  text-align: center;
+}
+.popup-grid-4-rows-month {
+  grid-template-columns: repeat(3, 1fr); /* 3 columns x 4 rows = 12 items */
+}
+.popup-grid-4-rows-year {
+  grid-template-columns: repeat(3, 1fr); /* 3 columns x 4 rows = 12 items */
+}
+.popup-item {
+  padding: 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.popup-item:hover {
+  background-color: #007bff;
+  color: white;
+}
+  </style>
 </head>
 <body>
-
-    <!-- PAGE LOADER ANIMATION -->
-    <div id="pageLoader" class="loader-overlay">
-        <div class="loader-badge"><i class="fa-solid fa-book-open-reader"></i></div>
-        <div class="spinner"></div>
-        <div class="loader-text">កំពុងដំណើរការ....</div>
+  <form id="signupForm">
+    <div class="form-header">
+      <img src="moeys.png" alt="Logo" class="logo">
+     <h2 class="sitename">ព័ត៌មានបេក្ខភាពប្រឡងទី៩<!--<span class="auto-input ti"></span>--></h2>
     </div>
-
-    <!-- CUSTOM POPUP OVERLAY -->
-    <div id="customPopup" class="popup-overlay">
-        <div class="popup-box">
-            <p id="popupMessage"></p>
-            <button class="btn save-btn" id="popupOkBtn" onclick="closePopup()">OK</button>
+    <div class="form-row">
+      <label>ឈ្មោះសិស្ស<input type="text" name="name"  placeholder="នាមត្រកូល នាមខ្លួន" required></label>
+      <label>
+        <div class="options" id="sex">ភេទ
+          <label class="square-radio" >ប្រុស<input type="radio" name="sex" value="ប្រុស"   required></label>
+          <label class="square-radio"  >ស្រី<input type="radio" name="sex" value="ស្រី" ></label>
         </div>
+      </label>
     </div>
-
-    <!-- DOWNLOAD ANIMATION OVERLAY -->
-    <div id="downloadOverlay" class="download-overlay">
-        <div class="download-box">
-            <div id="downloadIconWrap" class="download-icon-wrap">
-                <i id="downloadIcon" class="fa-solid fa-file-arrow-down"></i>
-            </div>
-            <p id="downloadMessage">កំពុងទាញយក...</p>
-            <div class="download-progress-track">
-                <div id="downloadProgressBar" class="download-progress-bar"></div>
-            </div>
+    
+    <div class="form-row">
+      <label style="flex: 2; min-width: 250px;">ថ្ងៃខែឆ្នាំកំណើត
+        <div class="dob-container">
+          <label><input type="number" name="day" placeholder="ថ្ងៃទី" required></label>
+          <label><input type="text" id="dob-month-input" name="mon" placeholder="ខែ" readonly required></label>
+          <label><input type="text" id="dob-year-input" name="yea" placeholder="ឆ្នាំ" readonly required></label>
         </div>
+      </label>
+      <label style="flex: 1; min-width: 150px;">ទីកន្លែងកំណើត<input type="text" name="pob" value="ខេត្តព្រះសីហនុ" required></label>
     </div>
-
-    <!-- PDF PREVIEW MODAL -->
-    <div id="pdfPreviewOverlay" class="pdf-preview-overlay">
-        <div class="pdf-preview-box">
-            <div class="pdf-preview-header">
-                <div class="pdf-preview-tools">
-                    <button class="pdf-preview-zoom-btn" id="pdfZoomOutBtn" type="button" title="Zoom out" aria-label="Zoom out"><i class="fa-solid fa-minus"></i></button>
-                    <span class="pdf-preview-zoom-level" id="pdfZoomLevel">100%</span>
-                    <button class="pdf-preview-zoom-btn" id="pdfZoomInBtn" type="button" title="Zoom in" aria-label="Zoom in"><i class="fa-solid fa-plus"></i></button>
-                </div>
-                <h3 id="pdfPreviewTitle">មើលឯកសារ PDF</h3>
-                <span class="pdf-preview-close" id="pdfPreviewCloseBtn" title="Close"><i class="fa-solid fa-circle-xmark"></i></span>
-            </div>
-            <div class="pdf-preview-body">
-                <div id="pdfPreviewLoading" class="pdf-preview-loading">
-                    <div class="spinner"></div>
-                    <span>កំពុងផ្ទុក PDF...</span>
-                </div>
-                <div id="pdfPreviewPages" class="pdf-preview-pages"></div>
-            </div>
+    
+    <div class="form-row">
+      <label>រៀនថ្នាក់ទី
+        <div class="custom-select" id="grade-select">
+          <div class="custom-select-trigger" tabindex="0" role="button" aria-haspopup="listbox" aria-expanded="false">ជ្រើសរើស</div>
+          <div class="custom-select-options" role="listbox">
+            <div class="custom-select-option" data-value="9A" role="option">9A</div>
+            <div class="custom-select-option" data-value="9B" role="option">9B</div>
+            <div class="custom-select-option" data-value="9C" role="option">9C</div>
+            <div class="custom-select-option" data-value="9D" role="option">9D</div>
+            <div class="custom-select-option" data-value="9E" role="option">9E</div>
+            <div class="custom-select-option" data-value="9F" role="option">9F</div>
+            <div class="custom-select-option" data-value="9G" role="option">9G</div>
+            <div class="custom-select-option" data-value="9H" role="option">9H</div>
+          </div>
+          <input type="hidden" name="grade" id="grade-hidden-input" required>
         </div>
-    </div>
-
-
-
-    <div class="hero">
-        <span class="hero-decor" style="top:12%; left:7%; animation-delay:0s;"><i class="fa-solid fa-book"></i></span>
-        <span class="hero-decor" style="top:60%; left:15%; animation-delay:1.2s; font-size:1.1rem;"><i class="fa-solid fa-pen"></i></span>
-        <span class="hero-decor" style="top:20%; right:9%; animation-delay:0.6s;"><i class="fa-solid fa-graduation-cap"></i></span>
-        <span class="hero-decor" style="top:65%; right:16%; animation-delay:1.8s; font-size:1.1rem;"><i class="fa-solid fa-book-bookmark"></i></span>
-        <h3>វិទ្យាល័យ ហ៊ុន សែន មិត្តភាព</h3>
-        <p>បញ្ជីខ្ចីសងសៀវភៅ(ថ្នាក់ទី 7-12) ២០២៦~២០២៧</p>
-    </div>
-
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="ស្វែងរកថ្នាក់ ឧ. 7A">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-    </div>
-
-    <div id="resultsContainer"></div>
-
-    <!-- STUDENT PANEL -->
-    <div id="studentPanelOverlay" class="panel-overlay">
-        <div class="student-panel">
-            <div class="panel-header">
-                <h2 id="panelClassTitle">Class Roster</h2>
-                <span class="close-btn" id="closePanelBtn" title="Close"><i class="fa-solid fa-circle-xmark"></i></span>
-            </div>
-
-            <div class="panel-content" id="studentListContainer"></div>
-
-            <div class="panel-footer">
-                <button class="btn save-btn" id="saveBtn" >Save <i class="fa-solid fa-book"></i></button>
-                <button class="btn3 preview-btn" id="previewBtn" title="Preview PDF">View <i class="fa-solid fa-eye"></i></button>
-                <button class="btn3 pdf-btn" id="pdfBtn" title="Download">PDF <i class="fa-solid fa-file-pdf"></i></button>
-                <button class="btn3 excel-btn" id="excelBtn" title="Download">Excel <i class="fa-solid fa-file-excel"></i></button>
-            </div>
+      </label>
+      <label>
+        <div class="options">ភាសា
+          <label class="square-radio">អង់គ្លេស<input type="radio" name="language" value="អង់គ្លេស" required></label>
+          <label class="square-radio">បារាំង<input type="radio" name="language" value="បារាំង"></label>
         </div>
+      </label>
     </div>
-
-    <!-- SITE FOOTER -->
-    <footer id="siteFooter" class="site-footer">
-        <span>© 2026 — បង្កើតដោយ លោក</span> <span style="color: #7acdfd;">ពីន គុយ</span>
-        <span class="heart"><i class="fa-solid fa-heart"></i></span>
-    </footer>
    
-    <script>
-        // Custom Pop-up Functions
-        function showPopup(message, refreshOnOk = false) {
-            document.getElementById('popupMessage').textContent = message;
-            document.getElementById('customPopup').style.display = 'flex';
-            document.getElementById('customPopup').dataset.refresh = refreshOnOk ? 'true' : 'false';
-        }
+    <div class="form-row">
+      <label>ឈ្មោះឪពុក<input type="text" name="father_name" required></label>
+      <label>មុខរបរឪពុក<input type="text" name="father_job" required></label>
+    </div>
+    <div class="form-row">
+      <label>ឈ្មោះម្ដាយ<input type="text" name="mother_name" required></label>
+      <label>មុខរបរម្ដាយ<input type="text" name="mother_job" required></label>
+    </div>
+    <div class="form-row">
+      <label>លេខទូរសព្ទផ្ទាល់ខ្លួន<input type="tel" name="phone" required></label>
+     <div> <label>សំបុត្រកំណើត</label>
+      <label class="custom-file-label">
+  ជ្រើសរូបភាព <i class="fa-regular fa-image"></i>
+  <input type="file" name="image" class="custom-file-input" accept=".jpg,.jpeg,.png" required onchange="showFileName(this)">
+</label>
+<span class="filename-display" id="file-name" style="color:red">មិនទាន់ជ្រើសរូបភាព</span>
 
-        function closePopup() {
-            const popup = document.getElementById('customPopup');
-            const shouldRefresh = popup.dataset.refresh === 'true';
-            popup.style.display = 'none';
-            if (shouldRefresh) {
-                location.reload();
-            }
-        }
+<!-- Add this preview container below the filename span -->
+<div id="image-preview-container" style="display: none; margin-top: 15px; text-align: center;">
+  <img id="image-preview" src="" alt="Image Preview" style="max-width: 100%; max-height: 200px; border-radius: 8px; border: 2px solid #ccc; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+</div>
 
-        // 📍 REPLACE WITH YOUR GOOGLE APPS SCRIPT WEB APP URL
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxF-W9lhc76o5H6JYDSHj1kL6EaEdo4Qz0N35MnIxXHPIaQjO-u5lI-jT4o4pS53RebjQ/exec";
+</div>
+    </div>
+    <div class="form-buttons">
+        <button type="reset" class="btn3d btn btn-default btn-lg">សម្អាត <i class="fa-solid fa-arrows-rotate"></i></button>
+      <button type="submit" class="btn btn-success btn-lg btn3d">រក្សាទុក <i class="fa-solid fa-floppy-disk"></i></button>
+    
+      
+    </div>
+  <!--- <p id="status" ></p> -->
+  </form>
 
-        const SUBJECTS_BY_GROUP = {
-            '7-9': [
-                "ខ្មែរ(ខ្ចី)", "ខ្មែរ(សង)", "គណិត(ខ្ចី)", "គណិត(សង)", "សិក្សាសង្គម(ខ្ចី)", "សិក្សាសង្គម(សង)", "វិទ្យាសាស្ត្រ(ខ្ចី)",
-                "វិទ្យាសាស្ត្រ(សង)", "ភាសា(ខ្ចី)", "ភាសា(សង)", "ផ្សេងៗ"
-            ],
-            '10-12': [
-                "ខ្មែរ(ខ្ចី)", "ខ្មែរ(សង)", "គណិត១(ខ្ចី)", "គណិត១(សង)", "គណិត២(ខ្ចី)", "គណិត២(សង)", "រូបវិទ្យា(ខ្ចី)", "រូបវិទ្យា(សង)", "គីមី(ខ្ចី)",
-                "គីមី(សង)", "ជីវវិទ្យា(ខ្ចី)", "ជីវវិទ្យា(សង)", "ផែនដី(ខ្ចី)","ផែនដី(សង)", "សីលធម៌(ខ្ចី)", "សីលធម៌(សង)", "ភូមិវិទ្យា(ខ្ចី)", "ភូមិវិទ្យា(សង)","ប្រវត្តិវិទ្យា(ខ្ចី)", "ប្រវត្តិវិទ្យា(សង)", "ភាសា(ខ្ចី)", "ភាសា(សង)", "ផ្សេងៗ"
-            ]
-        };
+  <div id="monthModal" class="popup-modal">
+    <div class="popup-content">
+      <h3 style="margin-top:0; text-align:center;">ជ្រើសរើសខែ</h3>
+      <div class="popup-grid popup-grid-4-rows-month" id="monthGrid"></div>
+    </div>
+  </div>
 
-        const CLASS_GROUP_LABELS = {
-            '7-9': 'ថ្នាក់ទី ',
-            '10-12': 'ថ្នាក់ទី '
-        };
+  <div id="yearModal" class="popup-modal">
+    <div class="popup-content">
+      <h3 style="margin-top:0; text-align:center;">ជ្រើសរើសឆ្នាំ</h3>
+      <div class="popup-grid popup-grid-4-rows-year" id="yearGrid"></div>
+    </div>
+  </div>
 
-        const SECONDARY_CLASS_SHEET = 'List-Book';
+<script>
+// Month and Year Popup Setup
+const monthModal = document.getElementById("monthModal");
+const yearModal = document.getElementById("yearModal");
+const monthInput = document.getElementById("dob-month-input");
+const yearInput = document.getElementById("dob-year-input");
 
-        function getClassGroup(className) {
-            const match = String(className).match(/(\d+)/);
-            if (!match) return '7-9';
-            const grade = Number(match[1]);
-            return (grade >= 10 && grade <= 12) ? '10-12' : '7-9';
-        }
-
-        function getSubjectsForClass(className) {
-            return SUBJECTS_BY_GROUP[getClassGroup(className)] || SUBJECTS_BY_GROUP['7-9'];
-        }
-
-        function getTargetSheetName(className) {
-            return SECONDARY_CLASS_SHEET;
-        }
-
-        function getPdfOrientation(className) {
-            const match = String(className || '').match(/(\d+)/);
-            const grade = match ? Number(match[1]) : 0;
-            return (grade >= 10 && grade <= 12) ? 'landscape' : 'portrait';
-        }
-
-        // Header-level language picker (English / French / Chinese) shown on the
-        // ភាសា(ខ្ចី) column heading. Its value is saved to the sheet under a
-        // column headed exactly "ភាសា", separate from the per-student
-        // ភាសា(ខ្ចី)/ភាសា(សង) ថ្មី/ចាស់ dropdowns.
-        const LANGUAGE_SHEET_HEADER = "ភាសា";
-        const languageOptions = ["អង់គ្លេស", "បារាំង", "ចិន"];
-
-        // Reads the previously saved ភាសា value for a class from the loaded
-        // sheet data (every student in a class shares the same language, so
-        // the first non-empty value found is used to pre-fill the dropdown).
-        function getSavedLanguageValue(className) {
-            const students = studentData[className] || [];
-            for (const s of students) {
-                if (s.name === "សរុបចំនួនខូច") continue;
-                const val = s.attendance && s.attendance[LANGUAGE_SHEET_HEADER];
-                if (val) return val;
-            }
-            return '';
-        }
-
-        let classes = [];
-        let studentData = {}; 
-        let currentSelectedClass = "";
-        const attendanceData = {};
-
-        // Fetch Data from Google Apps Script Web App
-        async function loadDataFromAppsScript() {
-            const loader = document.getElementById('pageLoader');
-            try {
-                const response = await fetch(WEB_APP_URL);
-                studentData = await response.json();
-                classes = Object.keys(studentData);
-                console.log("Sheet data & attendance loaded successfully!");
-            } catch (error) {
-                console.error("Error loading sheet data:", error);
-                showPopup("No internet🛜 Please check!", true);
-            } finally {
-                // Hide loader once the data fetch is complete
-                if (loader) {
-                    loader.style.opacity = '0';
-                    setTimeout(() => {
-                        loader.style.display = 'none';
-                    }, 300); // Wait for transition to complete
-                }
-            }
-        }
-
-        const searchInput = document.getElementById('searchInput');
-        const resultsContainer = document.getElementById('resultsContainer');
-        const panelOverlay = document.getElementById('studentPanelOverlay');
-        const siteFooter = document.getElementById('siteFooter');
-        const closePanelBtn = document.getElementById('closePanelBtn');
-        const panelClassTitle = document.getElementById('panelClassTitle');
-        const studentListContainer = document.getElementById('studentListContainer');
-        const saveBtn = document.getElementById('saveBtn');
-        const pdfBtn = document.getElementById('pdfBtn');
-        const excelBtn = document.getElementById('excelBtn');
-        const previewBtn = document.getElementById('previewBtn');
-
-        // Download overlay elements
-        const downloadOverlay = document.getElementById('downloadOverlay');
-        const downloadIconWrap = document.getElementById('downloadIconWrap');
-        const downloadIcon = document.getElementById('downloadIcon');
-        const downloadMessage = document.getElementById('downloadMessage');
-        const downloadProgressBar = document.getElementById('downloadProgressBar');
-
-        // PDF preview modal elements
-        const pdfPreviewOverlay = document.getElementById('pdfPreviewOverlay');
-        const pdfPreviewBox = document.querySelector('.pdf-preview-box');
-        const pdfPreviewPages = document.getElementById('pdfPreviewPages');
-        const pdfPreviewLoading = document.getElementById('pdfPreviewLoading');
-        const pdfPreviewTitle = document.getElementById('pdfPreviewTitle');
-        const pdfPreviewCloseBtn = document.getElementById('pdfPreviewCloseBtn');
-        const pdfZoomOutBtn = document.getElementById('pdfZoomOutBtn');
-        const pdfZoomInBtn = document.getElementById('pdfZoomInBtn');
-        const pdfZoomLevel = document.getElementById('pdfZoomLevel');
-        let pdfPreviewZoom = 1;
-
-        function updatePdfPreviewZoom() {
-            pdfZoomLevel.textContent = `${Math.round(pdfPreviewZoom * 100)}%`;
-            pdfZoomOutBtn.disabled = pdfPreviewZoom <= 0.5;
-            pdfZoomInBtn.disabled = pdfPreviewZoom >= 2;
-            pdfPreviewPages.classList.toggle('is-zoomed', pdfPreviewZoom > 1);
-            pdfPreviewPages.querySelectorAll('.pdf-page-canvas').forEach(canvas => {
-                const baseWidth = Number(canvas.dataset.baseWidth);
-                canvas.style.width = `${baseWidth * pdfPreviewZoom}px`;
-            });
-        }
-
-        if (window.pdfjsLib) {
-            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-        }
-
-        // Renders every page of the PDF as an image inside the modal.
-        // Using PDF.js instead of an <iframe>/blob URL is what makes this work
-        // reliably on mobile browsers and in-app browsers (Telegram, Messenger, etc.)
-        async function openPdfPreview(pdfBytes, title) {
-            pdfPreviewTitle.textContent = title || 'មើលឯកសារ PDF';
-            pdfPreviewPages.innerHTML = '';
-            pdfPreviewPages.style.visibility = 'hidden';
-            pdfPreviewZoom = 1;
-            updatePdfPreviewZoom();
-            pdfPreviewLoading.style.display = 'flex';
-            pdfPreviewOverlay.style.display = 'flex';
-
-            try {
-                if (!window.pdfjsLib) {
-                    throw new Error('PDF.js not loaded');
-                }
-
-                const loadingTask = pdfjsLib.getDocument({ data: pdfBytes });
-                const pdfDoc = await loadingTask.promise;
-
-                for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
-                    const page = await pdfDoc.getPage(pageNum);
-                    const containerWidth = pdfPreviewPages.clientWidth || 800;
-                    const baseViewport = page.getViewport({ scale: 1 });
-                    const scale = (containerWidth / baseViewport.width) * (window.devicePixelRatio || 1);
-                    const viewport = page.getViewport({ scale });
-
-                    const canvas = document.createElement('canvas');
-                    canvas.className = 'pdf-page-canvas';
-                    canvas.width = viewport.width;
-                    canvas.height = viewport.height;
-                    canvas.dataset.baseWidth = viewport.width / (window.devicePixelRatio || 1);
-                    canvas.style.width = canvas.dataset.baseWidth + 'px';
-
-                    const context = canvas.getContext('2d');
-                    await page.render({ canvasContext: context, viewport: viewport }).promise;
-
-                    pdfPreviewPages.appendChild(canvas);
-
-                    if (pageNum === 1) {
-                        pdfPreviewLoading.style.display = 'none';
-                        pdfPreviewPages.style.visibility = 'visible';
-                    }
-                }
-            } catch (err) {
-                console.error(err);
-                pdfPreviewLoading.style.display = 'none';
-                closePdfPreview();
-                showPopup('មិនអាចបើកមើល PDF បានទេ សូមព្យាយាមទាញយកជំនួសវិញ (Could not preview the PDF — please try downloading it instead).');
-            }
-        }
-
-        function closePdfPreview() {
-            pdfPreviewOverlay.style.display = 'none';
-            pdfPreviewPages.innerHTML = '';
-        }
-
-        pdfPreviewCloseBtn.addEventListener('click', closePdfPreview);
-        let isDraggingPdfPreview = false;
-        let pdfPreviewDragOffsetX = 0;
-        let pdfPreviewDragOffsetY = 0;
-        let pdfPreviewDragStartX = 0;
-        let pdfPreviewDragStartY = 0;
-        let pdfPreviewDragPositioned = false;
-
-        function startPdfPreviewDrag(clientX, clientY, target) {
-            if (target.closest('button, .pdf-preview-close, .pdf-page-canvas')) return;
-
-            const boxRect = pdfPreviewBox.getBoundingClientRect();
-            const isResizeHandle = clientX >= boxRect.right - 20 && clientY >= boxRect.bottom - 20;
-            if (isResizeHandle) return;
-            isDraggingPdfPreview = true;
-            pdfPreviewDragPositioned = false;
-            pdfPreviewDragStartX = clientX;
-            pdfPreviewDragStartY = clientY;
-            pdfPreviewDragOffsetX = clientX - boxRect.left;
-            pdfPreviewDragOffsetY = clientY - boxRect.top;
-        }
-
-        pdfPreviewBox.addEventListener('mousedown', (event) => {
-            startPdfPreviewDrag(event.clientX, event.clientY, event.target);
-        });
-
-        pdfPreviewBox.addEventListener('touchstart', (event) => {
-            if (event.touches.length === 1) {
-                const touch = event.touches[0];
-                startPdfPreviewDrag(touch.clientX, touch.clientY, event.target);
-            }
-        }, { passive: true });
-
-        document.addEventListener('mousemove', (event) => {
-            if (!isDraggingPdfPreview) return;
-            if (!pdfPreviewDragPositioned) {
-                const movedDistance = Math.max(
-                    Math.abs(event.clientX - pdfPreviewDragStartX),
-                    Math.abs(event.clientY - pdfPreviewDragStartY)
-                );
-                if (movedDistance < 3) return;
-                const boxRect = pdfPreviewBox.getBoundingClientRect();
-                pdfPreviewBox.style.left = `${boxRect.left}px`;
-                pdfPreviewBox.style.top = `${boxRect.top}px`;
-                pdfPreviewBox.style.transform = 'none';
-                pdfPreviewBox.classList.add('is-dragging');
-                pdfPreviewDragPositioned = true;
-            }
-            const visibleEdge = 80;
-            const maxLeft = Math.max(0, window.innerWidth - visibleEdge);
-            const maxTop = Math.max(0, window.innerHeight - visibleEdge);
-            const left = Math.min(maxLeft, Math.max(0, event.clientX - pdfPreviewDragOffsetX));
-            const top = Math.min(maxTop, Math.max(0, event.clientY - pdfPreviewDragOffsetY));
-            pdfPreviewBox.style.left = `${left}px`;
-            pdfPreviewBox.style.top = `${top}px`;
-        });
-
-        document.addEventListener('mouseup', () => {
-            isDraggingPdfPreview = false;
-            pdfPreviewBox.classList.remove('is-dragging');
-            pdfPreviewDragPositioned = false;
-        });
-
-        document.addEventListener('touchmove', (event) => {
-            if (!isDraggingPdfPreview || event.touches.length !== 1) return;
-            event.preventDefault();
-            if (!pdfPreviewDragPositioned) {
-                const touch = event.touches[0];
-                const movedDistance = Math.max(
-                    Math.abs(touch.clientX - pdfPreviewDragStartX),
-                    Math.abs(touch.clientY - pdfPreviewDragStartY)
-                );
-                if (movedDistance < 3) return;
-                const boxRect = pdfPreviewBox.getBoundingClientRect();
-                pdfPreviewBox.style.left = `${boxRect.left}px`;
-                pdfPreviewBox.style.top = `${boxRect.top}px`;
-                pdfPreviewBox.style.transform = 'none';
-                pdfPreviewBox.classList.add('is-dragging');
-                pdfPreviewDragPositioned = true;
-            }
-            const touch = event.touches[0];
-            const visibleEdge = 80;
-            const maxLeft = Math.max(0, window.innerWidth - visibleEdge);
-            const maxTop = Math.max(0, window.innerHeight - visibleEdge);
-            const left = Math.min(maxLeft, Math.max(0, touch.clientX - pdfPreviewDragOffsetX));
-            const top = Math.min(maxTop, Math.max(0, touch.clientY - pdfPreviewDragOffsetY));
-            pdfPreviewBox.style.left = `${left}px`;
-            pdfPreviewBox.style.top = `${top}px`;
-        }, { passive: false });
-
-        document.addEventListener('touchend', () => {
-            isDraggingPdfPreview = false;
-            pdfPreviewBox.classList.remove('is-dragging');
-            pdfPreviewDragPositioned = false;
-        });
-
-        document.addEventListener('touchcancel', () => {
-            isDraggingPdfPreview = false;
-            pdfPreviewBox.classList.remove('is-dragging');
-            pdfPreviewDragPositioned = false;
-        });
-
-        pdfZoomOutBtn.addEventListener('click', () => {
-            pdfPreviewZoom = Math.max(0.5, pdfPreviewZoom - 0.25);
-            updatePdfPreviewZoom();
-        });
-        pdfZoomInBtn.addEventListener('click', () => {
-            pdfPreviewZoom = Math.min(2, pdfPreviewZoom + 0.25);
-            updatePdfPreviewZoom();
-        });
-        function showDownloadOverlay(type, mode = 'download') {
-            downloadIconWrap.classList.remove('pdf', 'excel');
-            downloadProgressBar.classList.remove('pdf-color', 'excel-color');
-
-            if (type === 'pdf') {
-                downloadIconWrap.classList.add('pdf');
-                downloadProgressBar.classList.add('pdf-color');
-                downloadIcon.className = mode === 'preview' ? 'fa-solid fa-eye' : 'fa-solid fa-file-pdf';
-                downloadMessage.textContent = mode === 'preview' ? 'កំពុងបើក file' : 'កំពុងទាញយក PDF...';
-            } else {
-                downloadIconWrap.classList.add('excel');
-                downloadProgressBar.classList.add('excel-color');
-                downloadIcon.className = 'fa-solid fa-file-excel';
-                downloadMessage.textContent = 'កំពុងទាញយក Excel...';
-            }
-
-            downloadOverlay.style.display = 'flex';
-        }
-
-        function hideDownloadOverlay() {
-            downloadOverlay.style.display = 'none';
-        }
-// Detect if opened inside Telegram, Facebook, Messenger, Instagram, or Line
-function isInAppBrowser() {
-    const ua = navigator.userAgent || navigator.vendor || window.opera;
-    return (ua.includes("FBAN") || ua.includes("FBAV") || 
-            ua.includes("Telegram") || ua.includes("Line") || 
-            ua.includes("Instagram"));
+// Generate Month grid (1 to 12)
+const monthGrid = document.getElementById("monthGrid");
+for (let i = 1; i <= 12; i++) {
+  const item = document.createElement("div");
+  item.className = "popup-item";
+  item.textContent = i;
+  item.addEventListener("click", function() {
+    monthInput.value = i;
+    monthModal.style.display = "none";
+  });
+  monthGrid.appendChild(item);
 }
 
-async function triggerDownload(action, type, sheetName, mode = 'download', className = sheetName) {
-    showDownloadOverlay(type, mode);
+// Generate Year grid (2005 to 2016)
+const yearGrid = document.getElementById("yearGrid");
+for (let i = 2005; i <= 2016; i++) {
+  const item = document.createElement("div");
+  item.className = "popup-item";
+  item.textContent = i;
+  item.addEventListener("click", function() {
+    yearInput.value = i;
+    yearModal.style.display = "none";
+  });
+  yearGrid.appendChild(item);
+}
+
+// Show Modals on Input click
+monthInput.addEventListener("click", () => monthModal.style.display = "block");
+yearInput.addEventListener("click", () => yearModal.style.display = "block");
+
+// Close modals when clicking outside
+window.addEventListener("click", function(e) {
+  if (e.target === monthModal) monthModal.style.display = "none";
+  if (e.target === yearModal) yearModal.style.display = "none";
+});
+
+document.getElementById("signupForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  // Disable button during submission
+  submitBtn.disabled = true;
+  submitBtn.style.opacity = "0.6";
+  submitBtn.style.cursor = "not-allowed";
+
+  const formData = new FormData(form);
+  const imageInput = document.querySelector('input[name="image"]');
+  const imageFile = imageInput.files && imageInput.files[0];
+
+  if (!imageFile || imageFile.size === 0 || !imageFile.type.match(/^image\/(jpeg|png)$/)) {
+    // Modern Error Popup for missing image
+    Swal.fire({
+      icon: 'warning',
+      title: 'សូមត្រួតពិនិត្យម្ដងទៀត',
+      text: 'សូមជ្រើសរើសរូបភាព (.jpg, .png)',
+      confirmButtonText: 'យល់ព្រម',
+      confirmButtonColor: '#3085d6'
+    });
+    submitBtn.disabled = false;
+    submitBtn.style.opacity = "1";
+    submitBtn.style.cursor = "pointer";
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = async function () {
+    const imageBase64 = reader.result;
+
+    const data = new URLSearchParams();
+    formData.forEach((value, key) => {
+      if (key !== "image") data.append(key, value);
+    });
+    data.append("image", imageBase64);
+    data.append("imageType", imageFile.type);
+
+    // Modern Loading Popup (សូមរង់ចាំ)
+    Swal.fire({
+      title: 'កំពុងដំណើរការ...',
+      html: 'សូមរង់ចាំបន្តិច!',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
 
     try {
-        const orientation = getPdfOrientation(className);
-        const scriptUrl = `${WEB_APP_URL}?action=${action}&sheetName=${encodeURIComponent(sheetName)}&className=${encodeURIComponent(className)}&orientation=${encodeURIComponent(orientation)}`;
-        const response = await fetch(scriptUrl);
-        const data = await response.json();
+      const response = await fetch("https://script.google.com/macros/s/AKfycby-RSi6KcqeJS_OpH-VfkLPreynAr4oVrW8AEqmoiAmrekFTn8sPDPyMZKPvsqx81Ao/exec", {
+        method: "POST",
+        body: data,
+      });
 
-        if (!data.success || !data.base64) {
-            throw new Error(data.error || 'Failed to generate file.');
-        }
-
-        // Convert Base64 response into local file bytes
-        const byteCharacters = atob(data.base64);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-
-        if (mode === 'preview') {
-            // Render pages directly via PDF.js instead of a blob URL/iframe —
-            // this is what makes preview work on mobile & in-app browsers.
-            const previewTitle = `${document.title || 'Sheet'} - ${sheetName}`;
-            await openPdfPreview(byteArray, previewTitle);
-        } else {
-            const blob = new Blob([byteArray], { type: data.mimeType });
-            const blobUrl = URL.createObjectURL(blob);
-
-            const extension = type === 'pdf' ? 'pdf' : 'xlsx';
-            const classLabel = String(className || sheetName || 'Class').trim();
-            const fileNameBase = `បញ្ជីសៀវភៅ ${classLabel || 'Class'}`
-                .replace(/[\\/:*?"<>|]/g, '')
-                .replace(/\s+/g, ' ')
-                .trim();
-            const downloadName = `${fileNameBase}.${extension}`;
-
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.href = blobUrl;
-            downloadAnchor.download = downloadName;
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            document.body.removeChild(downloadAnchor);
-
-            setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
-        }
-
+      const result = await response.text();
+      if (response.ok && result.includes("Success")) {
+        // Modern Success Popup (ជោគជ័យ)
+        Swal.fire({
+          icon: 'success',
+          title: 'ជោគជ័យ!',
+          text: 'ទិន្នន័យត្រូវបានរក្សាទុក',
+          showConfirmButton: false,
+          timer: 5000 // Auto-closes after 5 seconds
+        });
+        form.reset();
+      } else {
+        // Modern Error Popup
+        Swal.fire({
+          icon: 'error',
+          title: 'បរាជ័យ!',
+          text: 'បញ្ហាក្នុងការផ្ញើទិន្នន័យ: ' + result,
+          confirmButtonColor: '#d33'
+        });
+      }
     } catch (err) {
-        console.error(err);
-        showPopup('Download failed. Please check your internet and try again!');
+      // Modern Error Popup for network issues
+      Swal.fire({
+        icon: 'error',
+        title: 'មានបញ្ហា!',
+        text: err.message,
+        confirmButtonColor: '#d33'
+      });
     } finally {
-        setTimeout(hideDownloadOverlay, 1000);
+      // Re-enable button after sending data
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = "1";
+      submitBtn.style.cursor = "pointer";
     }
+  };
+
+  reader.readAsDataURL(imageFile);
+});
+
+document.getElementById("signupForm").addEventListener("reset", function () {
+  document.getElementById("file-name").textContent = "មិនទាន់ជ្រើសរូបភាព";
+  document.getElementById("file-name").style.color = "red";
+  
+  // Clear the image preview on reset
+  document.getElementById("image-preview-container").style.display = "none";
+  document.getElementById("image-preview").src = "";
+});
+
+function showFileName(input) {
+  const fileNameSpan = document.getElementById("file-name");
+  const previewContainer = document.getElementById("image-preview-container");
+  const previewImage = document.getElementById("image-preview");
+
+  if (input.files && input.files[0]) {
+    fileNameSpan.textContent = "បានជ្រើសរូបភាពហើយ ✅";
+    fileNameSpan.style.color = "green";
+    
+    // Create a preview of the selected image
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      previewImage.src = e.target.result;
+      previewContainer.style.display = "block";
+    };
+    reader.readAsDataURL(input.files[0]);
+
+  } else {
+    fileNameSpan.textContent = "មិនទាន់ជ្រើសរូបភាព";
+    fileNameSpan.style.color = "red";
+    
+    // Hide the preview if no image is selected
+    previewContainer.style.display = "none";
+    previewImage.src = "";
+  }
 }
-        // Convert Khmer numerals to Arabic numerals
-        function khmerToArabic(str) {
-            const khmerDigits = ['០', '១', '២', '៣', '៤', '៥', '៦', '៧', '៨', '៩'];
-            let result = str;
-            for (let i = 0; i < 10; i++) {
-                result = result.replace(new RegExp(khmerDigits[i], 'g'), i);
-            }
-            return result;
-        }
 
-        searchInput.addEventListener('input', function(e) {
-            const query = e.target.value.toLowerCase().trim();
-            if (query === "") {
-                resultsContainer.style.display = 'none';
-                return;
-            }
-
-            // Normalize query: convert Khmer numerals to Arabic for matching
-            const normalizedQuery = khmerToArabic(query);
-
-            const filteredClasses = classes.filter(c => {
-                const normalizedClass = khmerToArabic(c.toLowerCase());
-                return normalizedClass.includes(normalizedQuery);
-            });
-            
-            resultsContainer.innerHTML = '';
-
-            if (filteredClasses.length > 0) {
-                filteredClasses.forEach(className => {
-                    const div = document.createElement('div');
-                    div.className = 'class-item';
-                    div.textContent = className;
-                    
-                    div.addEventListener('click', () => {
-                        searchInput.value = '';
-                        resultsContainer.style.display = 'none';
-                        openStudentPanel(className);
-                    });
-                    
-                    resultsContainer.appendChild(div);
-                });
-            } else {
-                resultsContainer.innerHTML = '<div class="no-results">No classes found.</div>';
-            }
-            resultsContainer.style.display = 'block';
-        });
-
-        function openStudentPanel(className) {
-            currentSelectedClass = className;
-            const groupLabel = CLASS_GROUP_LABELS[getClassGroup(className)] || 'ថ្នាក់';
-            panelClassTitle.textContent = `បញ្ជីសៀវភៅ ${groupLabel} ${className} ឆ្នាំ 2026~27`;
-            renderStudentList();
-            panelOverlay.style.display = 'flex';
-            siteFooter.classList.add('hidden');
-        }
-
-        // Builds the sticky subject header row. Each header cell shares the same
-        // width/gap/order as .subject-attendance blocks in every student row, so
-        // the header stays aligned with the matching subject column as you scroll.
-        function renderSubjectHeader() {
-            const headerRow = document.createElement('div');
-            headerRow.className = 'subject-header-row';
-
-            const spacer = document.createElement('div');
-            spacer.className = 'subject-header-spacer';
-            spacer.textContent = 'ឈ្មោះសិស្ស';
-            headerRow.appendChild(spacer);
-
-            const headerCells = document.createElement('div');
-            headerCells.className = 'subject-header-cells';
-            const activeSubjects = getSubjectsForClass(currentSelectedClass);
-
-            activeSubjects.forEach(subject => {
-                const cell = document.createElement('div');
-                cell.className = 'subject-header-cell';
-
-                const label = document.createElement('span');
-                label.className = 'subject-header-label';
-                label.textContent = subject;
-                cell.appendChild(label);
-
-                if (subject === "ភាសា(ខ្ចី)") {
-                    cell.classList.add('subject-header-cell-with-select');
-                    cell.appendChild(buildLanguageHeaderSelect());
-                }
-
-                headerCells.appendChild(cell);
-            });
-
-            headerRow.appendChild(headerCells);
-            return headerRow;
-        }
-
-        // Builds the ភាសា (English/French/Chinese) picker that lives on the
-        // ភាសា(ខ្ចី) header cell. One selection applies to every student in the
-        // currently open class, saved to the sheet under the "ភាសា" column.
-        function buildLanguageHeaderSelect() {
-            const className = currentSelectedClass;
-            if (!attendanceData[className]) attendanceData[className] = {};
-            if (!attendanceData[className][LANGUAGE_SHEET_HEADER]) {
-                attendanceData[className][LANGUAGE_SHEET_HEADER] = {};
-            }
-
-            const select = document.createElement('select');
-            select.className = 'attendance-select subject-header-lang-select';
-
-            languageOptions.forEach(lang => {
-                const opt = document.createElement('option');
-                opt.value = lang;
-                opt.textContent = lang;
-                select.appendChild(opt);
-            });
-
-            // Prefer an in-memory (unsaved) selection, then whatever was last
-            // saved to the sheet for this class, defaulting to អង់គ្លេស.
-            const localValues = Object.values(attendanceData[className][LANGUAGE_SHEET_HEADER]).filter(v => v);
-            const initVal = localValues.length ? localValues[0] : (getSavedLanguageValue(className) || languageOptions[0]);
-            select.value = initVal;
-            updateSelectColor(select, select.value);
-
-            // Only the first (non-summary) student in the class carries the
-            // ភាសា value — it's a per-class setting, so one row is enough.
-            const students = studentData[className] || [];
-            const firstStudent = students.find(s => s.name !== "សរុបចំនួនខូច");
-
-            // Make sure the default (or restored) value is actually queued for
-            // save, not just displayed.
-            if (firstStudent && attendanceData[className][LANGUAGE_SHEET_HEADER][firstStudent.id] === undefined) {
-                attendanceData[className][LANGUAGE_SHEET_HEADER][firstStudent.id] = initVal;
-            }
-
-            select.addEventListener('change', (e) => {
-                const val = e.target.value;
-                if (firstStudent) {
-                    attendanceData[className][LANGUAGE_SHEET_HEADER][firstStudent.id] = val;
-                }
-                updateSelectColor(select, val);
-                scheduleAutoSave();
-            });
-
-            return enhanceSelect(select, { iconOnly: true, icon: 'fa-language' });
-        }
-
-        function renderStudentList() {
-            studentListContainer.innerHTML = '';
-            // Custom dropdown panels live in document.body (so they're never
-            // clipped by scrolling rows), so they must be cleared explicitly.
-            document.querySelectorAll('.cs-panel').forEach(p => p.remove());
-
-            const rawStudents = [...(studentData[currentSelectedClass] || [])];
-            const hasSummaryRow = rawStudents.some(student => student.name === "សរុបចំនួនខូច");
-            const students = hasSummaryRow ? rawStudents : [
-                ...rawStudents,
-                {
-                    id: 'summary-damaged-total',
-                    name: 'សរុបចំនួនខូច',
-                    attendance: {}
-                }
-            ].sort((a, b) => {
-                const aIsSummary = a.name === "សរុបចំនួនខូច";
-                const bIsSummary = b.name === "សរុបចំនួនខូច";
-                if (aIsSummary && !bIsSummary) return 1;
-                if (!aIsSummary && bIsSummary) return -1;
-                return 0;
-            });
-
-            studentListContainer.appendChild(renderSubjectHeader());
-
-            if (!attendanceData[currentSelectedClass]) {
-                attendanceData[currentSelectedClass] = {};
-            }
-
-        
-
-            const activeSubjects = getSubjectsForClass(currentSelectedClass);
-
-            students.forEach(student => {
-                const studentId = student.id;
-                const studentName = student.name;
-                const savedAttendanceObj = student.attendance || {};
-
-                const studentDiv = document.createElement('div');
-                studentDiv.className = 'student-item';
-
-                // Sticky Info
-                const infoDiv = document.createElement('div');
-                infoDiv.className = 'student-info';
-
-                const avatar = document.createElement('div');
-                avatar.className = 'student-avatar';
-                avatar.innerHTML = `
-                <i class="fa-solid fa-id-badge"></i>
-                `;
-
-                const nameSpan = document.createElement('span');
-                nameSpan.className = 'student-name';
-                nameSpan.textContent = studentName;
-                nameSpan.title = studentName;
-                nameSpan.setAttribute('role', 'button');
-                nameSpan.setAttribute('tabindex', '0');
-
-                let fullNameTimer;
-                const toggleFullName = (event) => {
-                    event.stopPropagation();
-                    document.querySelectorAll('.student-name.is-expanded').forEach(name => {
-                        if (name !== nameSpan) name.classList.remove('is-expanded');
-                    });
-                    clearTimeout(fullNameTimer);
-                    const isExpanded = nameSpan.classList.toggle('is-expanded');
-                    if (isExpanded) {
-                        fullNameTimer = setTimeout(() => {
-                            nameSpan.classList.remove('is-expanded');
-                        }, 2000);
-                    }
-                };
-                nameSpan.addEventListener('click', toggleFullName);
-                nameSpan.addEventListener('keydown', (event) => {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        toggleFullName(event);
-                    }
-                });
-
-                if (studentName === "សរុបចំនួនខូច") {
-                    studentDiv.classList.add('sticky-bottom');
-                    avatar.innerHTML = `
-                    <i class="fa-solid fa-book-skull"></i>
-                    `;
-                    nameSpan.style.fontSize = '1rem';
-                    nameSpan.style.color = 'red';
-                    nameSpan.style.width = 'calc(100% - 36px)';
-                    nameSpan.style.overflow = 'visible';
-                    nameSpan.style.textOverflow = 'unset';
-                    infoDiv.style.width = 'var(--student-column-width)';
-                    infoDiv.style.minWidth = 'var(--student-column-width)';
-                }
-
-                infoDiv.appendChild(avatar);
-                infoDiv.appendChild(nameSpan);
-                studentDiv.appendChild(infoDiv);
-
-                // Subjects Container
-                const subjectsContainer = document.createElement('div');
-                subjectsContainer.className = 'subjects-container';
-
-                // Special row: "សរុបចំនួនខូច" only tracks broken/damaged counts for (សង) subjects
-                const isDamagedSummaryRow = studentName === "សរុបចំនួនខូច";
-
-                // Tracks (ខ្ចី)/(សង) select pairs for this student row, keyed by base subject name
-                const pairSelects = {};
-
-                activeSubjects.forEach(subject => {
-                    // Hide (ខ្ចី) and ផ្សេងៗ subjects entirely for the damaged-summary row,
-                    // matching the same behavior in the 7–9 panel.
-                    if (isDamagedSummaryRow && (subject.includes('(ខ្ចី)') || subject === "ផ្សេងៗ")) {
-                        const placeholder = document.createElement('div');
-                        placeholder.className = 'subject-attendance subject-placeholder';
-                        placeholder.style.visibility = 'hidden';
-
-                        const placeholderFiller = document.createElement('select');
-                        placeholderFiller.className = 'attendance-select';
-                        placeholder.appendChild(placeholderFiller);
-
-                        subjectsContainer.appendChild(placeholder);
-                        return;
-                    }
-
-                    if (!attendanceData[currentSelectedClass][subject]) {
-                        attendanceData[currentSelectedClass][subject] = {};
-                    }
-
-                    const subjectBlock = document.createElement('div');
-                    subjectBlock.className = 'subject-attendance';
-
-                    // Load saved status from local user changes OR database
-                    if (attendanceData[currentSelectedClass][subject][studentId] === undefined) {
-                        const rawStatus = savedAttendanceObj[subject];
-                        const dbStatus = (rawStatus === undefined || rawStatus === null || rawStatus === '') ? null : rawStatus;
-                        attendanceData[currentSelectedClass][subject][studentId] = dbStatus;
-                    }
-
-                    const currentStatus = attendanceData[currentSelectedClass][subject][studentId];
-
-                    // Render Text Input for "ផ្សេងៗ", Select Dropdown for others
-                    if (subject === "ផ្សេងៗ") {
-                        const input = document.createElement('input');
-                        input.type = 'text';
-                        input.className = 'attendance-input';
-                        input.placeholder = '...';
-                        input.value = currentStatus || '';
-
-                        input.addEventListener('input', (e) => {
-                            const val = e.target.value.trim();
-                            attendanceData[currentSelectedClass][subject][studentId] = (val === '') ? null : val;
-                            scheduleAutoSave();
-                        });
-
-                        subjectBlock.appendChild(input);
-                    } else if (isDamagedSummaryRow && subject.includes('(សង)')) {
-                        // Damaged-summary row: (សង) subjects become a number input instead of a select
-                        const input = document.createElement('input');
-                        input.type = 'text';
-                        input.inputMode = 'numeric';
-                        input.className = 'attendance-input';
-                        input.placeholder = 'ចំនួនខូច';
-                        input.value = (currentStatus === null || currentStatus === undefined || currentStatus === '') ? '' : currentStatus;
-
-                        input.addEventListener('input', (e) => {
-                            const khmerDigits = '០១២៣៤៥៦៧៨៩';
-                            const val = e.target.value
-                                .replace(/[០-៩]/g, digit => String(khmerDigits.indexOf(digit)))
-                                .replace(/[^0-9]/g, '');
-                            e.target.value = val;
-                            attendanceData[currentSelectedClass][subject][studentId] = (val === '') ? null : val;
-                            scheduleAutoSave();
-                        });
-
-                        subjectBlock.appendChild(input);
-                    } else {
-                        const select = document.createElement('select');
-                        select.className = 'attendance-select';
-
-                        const optNoSelect = document.createElement('option');
-                        optNoSelect.value = 'null';
-                        optNoSelect.textContent = 'ជ្រើសរើស';
-                        select.appendChild(optNoSelect);
-
-                        // Base subject name shared between the (ខ្ចី) and (សង) pair, e.g. "ខ្មែរ"
-                        const baseSubject = subject.replace('(ខ្ចី)', '').replace('(សង)', '');
-                        if (!pairSelects[baseSubject]) pairSelects[baseSubject] = {};
-
-                        // Dynamic options based on subject type
-                        if (subject.includes('(សង)')) {
-                            const optBat = document.createElement('option');
-                            optBat.value = '1';
-                            optBat.textContent = 'សង';
-
-                            const optSong = document.createElement('option');
-                            optSong.value = '0';
-                            optSong.textContent = 'បាត់';
-
-                            select.appendChild(optBat);
-                            select.appendChild(optSong);
-                        } else {
-                            const optThmei = document.createElement('option');
-                            optThmei.value = 'ថ្មី';
-                            optThmei.textContent = 'ថ្មី';
-
-                            const optChas = document.createElement('option');
-                            optChas.value = 'ចាស់';
-                            optChas.textContent = 'ចាស់';
-
-                            select.appendChild(optThmei);
-                            select.appendChild(optChas);
-                        }
-
-                        const selectStatus = (currentStatus === null || currentStatus === undefined || currentStatus === '') ? 'null' : String(currentStatus);
-                        select.value = selectStatus;
-                        updateSelectColor(select, selectStatus);
-
-                        // Remember this (ខ្ចី) select so its paired (សង) select can check it
-                        if (subject.includes('(ខ្ចី)')) {
-                            pairSelects[baseSubject].khciSelect = select;
-                        }
-
-                        // A (សង) select starts disabled unless its (ខ្ចី) pair is already ថ្មី/ចាស់
-                        if (subject.includes('(សង)')) {
-                            pairSelects[baseSubject].songSelect = select;
-                            const khciSelect = pairSelects[baseSubject].khciSelect;
-                            const khciVal = khciSelect ? khciSelect.value : 'null';
-                            select.disabled = !(khciVal === 'ថ្មី' || khciVal === 'ចាស់');
-                        }
-
-                        select.addEventListener('change', (e) => {
-                            const val = e.target.value;
-                            attendanceData[currentSelectedClass][subject][studentId] = (val === 'null') ? null : val;
-                            updateSelectColor(select, val);
-                            scheduleAutoSave();
-
-                            // When (ខ្ចី) changes, enable/disable its paired (សង) select accordingly
-                            if (subject.includes('(ខ្ចី)')) {
-                                const pair = pairSelects[baseSubject];
-                                const songSelect = pair ? pair.songSelect : null;
-                                if (songSelect) {
-                                    const shouldEnable = (val === 'ថ្មី' || val === 'ចាស់');
-                                    songSelect.disabled = !shouldEnable;
-                                    if (!shouldEnable) {
-                                        // Reset the (សង) status when its (ខ្ចី) pair is cleared
-                                        const songSubject = baseSubject + '(សង)';
-                                        songSelect.value = 'null';
-                                        if (attendanceData[currentSelectedClass][songSubject]) {
-                                            attendanceData[currentSelectedClass][songSubject][studentId] = null;
-                                        }
-                                        updateSelectColor(songSelect, 'null');
-                                    }
-                                }
-                            }
-                        });
-
-                        subjectBlock.appendChild(enhanceSelect(select));
-                    }
-
-                    subjectsContainer.appendChild(subjectBlock);
-                });
-
-                studentDiv.appendChild(subjectsContainer);
-                studentListContainer.appendChild(studentDiv);
-            });
-        }
-
-        // --- Custom dropdown engine -------------------------------------
-        // Native <select> option lists render with completely different
-        // fonts/colors/paddings on Chrome, Safari, Firefox and mobile OS
-        // pickers, and CSS can't touch <option> styling to fix that. So
-        // we keep the real <select> (for its value/disabled/change-event
-        // behavior, which the rest of the app already relies on) but hide
-        // it and drive a custom-built, fully-styled dropdown on top of it
-        // that looks identical everywhere.
-        let __csGlobalListenersReady = false;
-        function ensureCustomSelectGlobalListeners() {
-            if (__csGlobalListenersReady) return;
-            __csGlobalListenersReady = true;
-            document.addEventListener('click', (e) => {
-                document.querySelectorAll('.custom-select-wrap.open').forEach(w => {
-                    if (!w.contains(e.target)) w._csClose();
-                });
-            });
-            document.addEventListener('scroll', () => {
-                document.querySelectorAll('.custom-select-wrap.open').forEach(w => w._csClose());
-            }, true);
-            window.addEventListener('resize', () => {
-                document.querySelectorAll('.custom-select-wrap.open').forEach(w => w._csClose());
-            });
-        }
-
-        function enhanceSelect(select, options = {}) {
-            ensureCustomSelectGlobalListeners();
-            const iconOnly = !!options.iconOnly;
-            const iconClass = options.icon || 'fa-language';
-
-            const wrap = document.createElement('div');
-            wrap.className = 'custom-select-wrap';
-
-            const trigger = document.createElement('button');
-            trigger.type = 'button';
-            trigger.className = select.className;
-            trigger.setAttribute('aria-haspopup', 'listbox');
-            trigger.setAttribute('aria-expanded', 'false');
-
-            const panel = document.createElement('div');
-            panel.className = 'cs-panel';
-            panel.setAttribute('role', 'listbox');
-            document.body.appendChild(panel);
-
-            function labelFor(value) {
-                const opt = Array.from(select.options).find(o => o.value === value);
-                return opt ? opt.textContent : '';
-            }
-
-            function syncTrigger() {
-                if (iconOnly) {
-                    trigger.innerHTML = `<i class="fa-solid ${iconClass}"></i>`;
-                    trigger.title = labelFor(select.value) || 'ជ្រើសរើស';
-                } else {
-                    trigger.textContent = labelFor(select.value);
-                }
-                trigger.className = select.className; // mirrors status colors (attendant/absent/etc.)
-                trigger.disabled = select.disabled;
-                panel.querySelectorAll('.cs-option').forEach(item => {
-                    item.classList.toggle('selected', item.dataset.value === select.value);
-                });
-            }
-
-            function buildOptions() {
-                panel.innerHTML = '';
-                Array.from(select.options).forEach(opt => {
-                    const item = document.createElement('div');
-                    item.className = 'cs-option';
-                    item.setAttribute('role', 'option');
-                    item.dataset.value = opt.value;
-                    item.textContent = opt.textContent;
-                    if (opt.value === select.value) item.classList.add('selected');
-                    item.addEventListener('click', () => {
-                        if (select.value !== opt.value) {
-                            select.value = opt.value;
-                            select.dispatchEvent(new Event('change'));
-                        }
-                        syncTrigger();
-                        closeDropdown();
-                    });
-                    panel.appendChild(item);
-                });
-            }
-
-            function positionPanel() {
-                const r = trigger.getBoundingClientRect();
-                const panelWidth = iconOnly ? Math.max(130, r.width) : r.width;
-                const spaceBelow = window.innerHeight - r.bottom;
-                const flipUp = spaceBelow < 220 && r.top > spaceBelow;
-                let left = Math.round(r.left);
-                const maxLeft = window.innerWidth - panelWidth - 8;
-                if (left > maxLeft) left = Math.max(8, maxLeft);
-                panel.style.left = left + 'px';
-                panel.style.width = Math.round(panelWidth) + 'px';
-                panel.classList.toggle('flip-up', flipUp);
-                if (flipUp) {
-                    panel.style.top = 'auto';
-                    panel.style.bottom = (window.innerHeight - r.top + 6) + 'px';
-                } else {
-                    panel.style.bottom = 'auto';
-                    panel.style.top = (r.bottom + 6) + 'px';
-                }
-            }
-
-            function openDropdown() {
-                if (select.disabled) return;
-                document.querySelectorAll('.custom-select-wrap.open').forEach(w => { if (w !== wrap) w._csClose(); });
-                buildOptions();
-                positionPanel();
-                wrap.classList.add('open');
-                panel.classList.add('open');
-                trigger.setAttribute('aria-expanded', 'true');
-            }
-
-            function closeDropdown() {
-                wrap.classList.remove('open');
-                panel.classList.remove('open');
-                trigger.setAttribute('aria-expanded', 'false');
-            }
-            wrap._csClose = closeDropdown;
-
-            trigger.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (wrap.classList.contains('open')) closeDropdown(); else openDropdown();
-            });
-
-            trigger.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') closeDropdown();
-                if ((e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') && !wrap.classList.contains('open')) {
-                    e.preventDefault();
-                    openDropdown();
-                }
-            });
-
-            new MutationObserver(syncTrigger).observe(select, { attributes: true, attributeFilter: ['class', 'disabled'] });
-
-            select.style.display = 'none';
-            select.setAttribute('aria-hidden', 'true');
-            select.tabIndex = -1;
-
-            wrap.appendChild(select);
-            wrap.appendChild(trigger);
-
-            syncTrigger();
-
-            return wrap;
-        }
-        // -----------------------------------------------------------------
-
-        function updateSelectColor(selectElement, status) {
-            selectElement.classList.remove('attendant', 'absent', 'oldbook','returnbook', 'no-select');
-            if (status === 'ថ្មី' || status === '') {
-                selectElement.classList.add('attendant');
-            } else if (status === '0' ) {
-                selectElement.classList.add('absent');
-            } else if (status === 'ចាស់' ) {
-                selectElement.classList.add('oldbook');  
-             } else if (status === '1' ) {
-                selectElement.classList.add('returnbook');        
-            } else {
-                selectElement.classList.add('no-select');
-            }
-        }
-
-        function setPanelEditingDisabled(disabled) {
-            document.querySelectorAll('.custom-select-wrap.open').forEach(w => w._csClose());
-
-            const controls = studentListContainer.querySelectorAll('input, select, .custom-select-wrap button');
-            controls.forEach(control => {
-                if (disabled) {
-                    control.dataset.wasDisabled = control.disabled ? 'true' : 'false';
-                    control.disabled = true;
-                } else {
-                    control.disabled = control.dataset.wasDisabled === 'true';
-                    delete control.dataset.wasDisabled;
-                }
-            });
-        }
-
-        let autoSaveTimer;
-        let isAutoSaveRequest = false;
-        let autoSavePending = false;
-
-        function scheduleAutoSave() {
-            autoSavePending = true;
-            clearTimeout(autoSaveTimer);
-            autoSaveTimer = setTimeout(() => {
-                if (!saveBtn.disabled && currentSelectedClass) {
-                    autoSavePending = false;
-                    isAutoSaveRequest = true;
-                    saveBtn.click();
-                }
-            }, 800);
-        }
-
-        previewBtn.addEventListener('click', () => {
-            if (!currentSelectedClass) return;
-            const targetSheetName = getTargetSheetName(currentSelectedClass);
-            triggerDownload('exportPdf', 'pdf', targetSheetName, 'preview', currentSelectedClass);
-        });
-
-        pdfBtn.addEventListener('click', () => {
-            if (!currentSelectedClass) return;
-            const targetSheetName = getTargetSheetName(currentSelectedClass);
-            triggerDownload('exportPdf', 'pdf', targetSheetName, 'download', currentSelectedClass);
-        });
-
-        excelBtn.addEventListener('click', () => {
-            if (!currentSelectedClass) return;
-            const targetSheetName = getTargetSheetName(currentSelectedClass);
-            triggerDownload('exportExcel', 'excel', targetSheetName, 'download', currentSelectedClass);
-        });
-
-    saveBtn.addEventListener('click', async () => {
-        const autoSaveRequest = isAutoSaveRequest;
-        isAutoSaveRequest = false;
-        autoSavePending = false;
-        clearTimeout(autoSaveTimer);
-            const records = [];
-            const classObj = attendanceData[currentSelectedClass] || {};
-            const targetSheetName = getTargetSheetName(currentSelectedClass);
-
-            for (const subject in classObj) {
-                for (const studentId in classObj[subject]) {
-                    const status = classObj[subject][studentId];
-                    
-                    // Allow both filled statuses and 'null' (cleared) statuses to be processed
-                    if (status !== undefined) {
-                        const studentObj = (studentData[currentSelectedClass] || []).find(s => s.id == studentId);
-                        const sName = studentObj ? studentObj.name : "";
-                        records.push({ 
-                            studentId: Number(studentId), 
-                            studentName: sName, 
-                            subject: subject, 
-                            // If status is null (cleared text), send an empty string to clear the Sheet
-                            status: status === null ? "" : status 
-                        });
-                    }
-                }
-            }
-
-            if (records.length === 0) {
-                if (!autoSaveRequest) {
-                    showPopup('Please select attendance status for at least one student.');
-                }
-                return;
-            }
-
-            saveBtn.disabled = true;
-            saveBtn.innerHTML = 'Saving <i class="fa-solid fa-spinner fa-spin"></i>';
-
-            try {
-                const response = await fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        className: currentSelectedClass,
-                        sheetName: targetSheetName,
-                        targetSheet: targetSheetName,
-                        records: records
-                    }),
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-                });
-
-                const res = await response.json();
-
-                if (res.success) {
-                    if (!autoSaveRequest) {
-                        showPopup(`Successfully saved ✔️ Thanks!`);
-                    }
-                    await loadDataFromAppsScript();
-                   // panelOverlay.style.display = 'none';
-                } else {
-                    showPopup('Error saving data: ' + res.error);
-                }
-            } catch (err) {
-                console.error(err);
-                showPopup('Failed to save ✖️ Try again!');
-            } finally {
-                saveBtn.disabled = false;
-               saveBtn.innerHTML = 'Save <i class="fa-solid fa-book"></i>';
-               if (autoSavePending && currentSelectedClass) {
-                   scheduleAutoSave();
-               }
-            }
-        });
-
-        closePanelBtn.addEventListener('click', () => {
-            panelOverlay.style.display = 'none';
-            siteFooter.classList.remove('hidden');
-        });
-        panelOverlay.addEventListener('click', (e) => {
-            if (e.target === panelOverlay) {
-                panelOverlay.style.display = 'none';
-                siteFooter.classList.remove('hidden');
-            }
-        });
-
-        loadDataFromAppsScript();
-    </script>
+// Custom dropdown (replaces native <select> for consistent
+// look on both mobile and desktop)
+(function () {
+  const wrapper = document.getElementById("grade-select");
+  const trigger = wrapper.querySelector(".custom-select-trigger");
+  const optionsList = wrapper.querySelector(".custom-select-options");
+  const options = wrapper.querySelectorAll(".custom-select-option");
+  const hiddenInput = document.getElementById("grade-hidden-input");
+  const placeholderText = "ជ្រើសរើស";
+
+  function closeDropdown() {
+    wrapper.classList.remove("open");
+    trigger.setAttribute("aria-expanded", "false");
+  }
+
+  function openDropdown() {
+    wrapper.classList.add("open");
+    trigger.setAttribute("aria-expanded", "true");
+  }
+
+  trigger.addEventListener("click", function (e) {
+    e.stopPropagation();
+    wrapper.classList.contains("open") ? closeDropdown() : openDropdown();
+  });
+
+  trigger.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      wrapper.classList.contains("open") ? closeDropdown() : openDropdown();
+    } else if (e.key === "Escape") {
+      closeDropdown();
+    }
+  });
+
+  options.forEach(function (opt) {
+    opt.addEventListener("click", function () {
+      options.forEach((o) => o.classList.remove("selected"));
+      opt.classList.add("selected");
+      trigger.textContent = opt.textContent;
+      trigger.classList.add("has-value");
+      hiddenInput.value = opt.getAttribute("data-value");
+      closeDropdown();
+    });
+  });
+
+  document.addEventListener("click", function (e) {
+    if (!wrapper.contains(e.target)) {
+      closeDropdown();
+    }
+  });
+
+  // Reset support: put the dropdown back to its placeholder state
+  document.getElementById("signupForm").addEventListener("reset", function () {
+    setTimeout(function () {
+      hiddenInput.value = "";
+      trigger.textContent = placeholderText;
+      trigger.classList.remove("has-value");
+      options.forEach((o) => o.classList.remove("selected"));
+      closeDropdown();
+    }, 0);
+  });
+})();
+
+</script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script>
+      var tyed = new Typed(".auto-input",{
+      strings: [" នៃវិ.ហស","មិត្តភាព"],
+      typeSpeed: 150,
+      
+      loop: true
+  })
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>
