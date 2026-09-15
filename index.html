@@ -96,7 +96,7 @@
             border-radius: 24px;
             border: 0px solid rgba(255,255,255,0.9);
             box-shadow: 0 0px 0px rgba(28, 39, 76, 0.12);
-            opacity: 0.7;
+            opacity: 0.9;
             pointer-events: none;
             z-index: 0;
             animation: photoFloat 8s ease-in-out infinite;
@@ -513,6 +513,7 @@
             flex-shrink: 0;
             margin-right: 6px;
             font-size: 0.85rem;
+            font-weight: 700;
         }
 
         .student-name {
@@ -1979,7 +1980,7 @@ async function triggerDownload(action, type, sheetName, mode = 'download', class
 
             const activeSubjects = getSubjectsForClass(currentSelectedClass);
 
-            students.forEach(student => {
+            students.forEach((student, studentIndex) => {
                 const studentId = student.id;
                 const studentName = student.name;
                 const savedAttendanceObj = student.attendance || {};
@@ -1993,9 +1994,7 @@ async function triggerDownload(action, type, sheetName, mode = 'download', class
 
                 const avatar = document.createElement('div');
                 avatar.className = 'student-avatar';
-                avatar.innerHTML = `
-                <i class="fa-solid fa-id-badge"></i>
-                `;
+                avatar.textContent = studentIndex + 1;
 
                 const nameSpan = document.createElement('span');
                 nameSpan.className = 'student-name';
